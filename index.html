@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <meta name="theme-color" content="#123c43" />
+    <title>AR 무안 갯벌 탐험</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <video id="camera-feed" autoplay muted playsinline></video>
+      <div id="canvas-wrap"></div>
+
+      <section id="intro" class="overlay intro">
+        <div class="intro__glow"></div>
+        <div class="intro__content">
+          <div class="logo-mark" aria-hidden="true">M</div>
+          <p class="eyebrow">MUAN TIDAL FLAT</p>
+          <h1>AR 무안 갯벌<br />조개 탐험</h1>
+          <p class="intro__copy">
+            현실 공간에 갯벌을 펼치고<br />
+            숨겨진 조개 5개를 찾아보세요.
+          </p>
+          <figure class="intro-photo">
+            <img
+              src="./assets/muan-tidal-flat-real.jpg"
+              alt="무안 갯벌에서 체험 중인 방문객과 갯벌 전경"
+            />
+            <figcaption>무안황토갯벌랜드 · 사진 제공 전라남도 무안군</figcaption>
+          </figure>
+          <button id="start-btn" class="primary-btn" type="button">
+            체험 시작하기
+          </button>
+          <p class="permission-copy">카메라 사용 권한이 필요합니다.</p>
+        </div>
+      </section>
+
+      <section id="hud" class="hud hidden" aria-label="게임 정보">
+        <header class="topbar">
+          <div class="brand">
+            <span class="brand__mark">M</span>
+            <span>무안 갯벌 탐험대</span>
+          </div>
+          <div class="score-pill" aria-live="polite">
+            <span class="score-pill__shell">◖</span>
+            <strong id="shell-count">0</strong><span>/5</span>
+            <i></i>
+            <strong id="score-count">0</strong><span>점</span>
+          </div>
+        </header>
+
+        <article class="mission">
+          <div>
+            <span>오늘의 미션</span>
+            <strong>갯벌에 숨은 조개 5개 찾기</strong>
+          </div>
+          <div class="progress" aria-hidden="true">
+            <span id="progress-bar"></span>
+          </div>
+        </article>
+
+        <div id="scan-guide" class="scan-guide">
+          <div class="scan-guide__icon">
+            <span></span>
+          </div>
+          <strong>바닥을 천천히 비춰주세요</strong>
+          <p>표시가 나타나면 화면을 터치하세요.</p>
+        </div>
+
+        <div id="toast" class="toast" aria-live="polite"></div>
+
+        <aside id="npc-dialog" class="npc-dialog" aria-live="polite">
+          <div class="npc-dialog__portrait" aria-hidden="true">
+            <span class="npc-eye npc-eye--left"></span>
+            <span class="npc-eye npc-eye--right"></span>
+            <span class="npc-mouth"></span>
+          </div>
+          <div class="npc-dialog__bubble">
+            <strong>무무</strong>
+            <p id="npc-message">안녕! 나는 갯벌 안내원 무무야.</p>
+          </div>
+        </aside>
+
+        <footer class="bottom-ui">
+          <p id="hint">주변의 평평한 바닥을 찾아보세요.</p>
+          <button id="reset-btn" class="round-btn" type="button" aria-label="다시 시작">
+            ↻
+          </button>
+        </footer>
+      </section>
+
+      <section id="complete" class="overlay modal hidden" role="dialog" aria-modal="true">
+        <div class="complete-card">
+          <div class="result-hero">
+            <div class="complete-npc" aria-hidden="true">
+              <span class="complete-npc__eye complete-npc__eye--left"></span>
+              <span class="complete-npc__eye complete-npc__eye--right"></span>
+            </div>
+            <div class="result-confetti" aria-hidden="true">✦ · ✦ · ✦</div>
+            <p class="eyebrow">MUAN TIDAL FLAT</p>
+            <h2>MISSION<br />COMPLETE!</h2>
+            <div id="result-stars" class="result-stars" aria-label="탐험 등급">★★★</div>
+            <p>모든 조개를 수집했어요!</p>
+          </div>
+
+          <section class="score-board">
+            <div><span>◖</span><small>수집한 조개</small><strong>5 / 5</strong></div>
+            <div><span>!</span><small>잘못 선택</small><strong id="mistake-count">0회</strong></div>
+            <div><span>★</span><small>최종 점수</small><strong id="final-score">500점</strong></div>
+          </section>
+
+          <article class="nature-card">
+            <div class="nature-card__visual">
+              <img
+                src="./assets/muan-tidal-flat-real.jpg"
+                alt="무안황토갯벌랜드 실제 전경"
+              />
+            </div>
+            <p class="photo-credit">
+              무안황토갯벌랜드23 · 전라남도 무안군 · 공공누리 제4유형
+            </p>
+            <div class="nature-card__body">
+              <span>무무의 갯벌 이야기</span>
+              <h3>무안 갯벌은 특별합니다!</h3>
+              <p>
+                넓은 무안 갯벌은 흰발농게와 저어새가 살아가는 생명의
+                공간이에요. 갯벌 생물은 잡지 말고 눈으로 관찰해 주세요.
+              </p>
+              <div class="fact-chips">
+                <span>물 정화</span><span>탄소 저장</span><span>생물 서식지</span>
+              </div>
+            </div>
+          </article>
+
+          <div class="result-tip">
+            <strong>무무의 한마디</strong>
+            <p id="result-comment">완벽한 탐험이야! 갯벌 박사로 임명할게.</p>
+          </div>
+          <div class="result-actions">
+            <button id="replay-btn" class="secondary-btn" type="button">↻ 다시 도전</button>
+            <button id="close-result-btn" class="primary-btn" type="button">갯벌 더 둘러보기</button>
+          </div>
+        </div>
+      </section>
+
+      <div id="unsupported" class="browser-note hidden">
+        AR을 지원하지 않아 카메라 체험 모드로 실행합니다.
+      </div>
+    </div>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+        }
+      }
+    </script>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
