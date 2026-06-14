@@ -823,12 +823,14 @@ h1 {
 .guide-modal,
 .info-modal {
   align-items: start;
+  justify-items: center;
   padding: max(18px, env(safe-area-inset-top)) 15px max(18px, env(safe-area-inset-bottom));
 }
 
 .guide-card {
-  width: min(100%, 620px);
-  margin: auto;
+  width: min(620px, calc(100vw - 30px));
+  min-width: 0;
+  margin: 0 auto;
   padding: 21px 16px 16px;
   border-radius: 25px;
   background: #f8fcff;
@@ -869,6 +871,8 @@ h1 {
   padding: 0 16px 7px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
+  max-width: calc(100vw - 30px);
+  min-width: 0;
 }
 
 .creature-card {
