@@ -930,67 +930,10 @@ h1 {
   font-weight: 950;
 }
 
-.model-preview--shell span {
-  width: 45px;
-  height: 31px;
-  border: 3px solid #ad7756;
-  border-radius: 50% 50% 42% 42%;
-  background: repeating-linear-gradient(90deg, #dfbd88 0 5px, #c89065 5px 8px);
-  box-shadow: 0 7px 0 rgba(29, 82, 160, 0.18);
-}
-
-.model-preview--crab span {
-  position: relative;
-  width: 43px;
-  height: 24px;
-  border-radius: 50%;
-  background: #b16e4e;
-}
-
-.model-preview--crab span::before,
-.model-preview--crab span::after {
-  position: absolute;
-  top: 2px;
-  width: 19px;
-  height: 12px;
-  border: 5px solid #8d583f;
-  border-bottom: 0;
-  content: "";
-}
-
-.model-preview--crab span::before {
-  right: 34px;
-  transform: rotate(-20deg);
-}
-
-.model-preview--crab span::after {
-  left: 34px;
-  transform: rotate(20deg);
-}
-
-.model-preview--fish span {
-  position: relative;
-  width: 48px;
-  height: 20px;
-  border-radius: 58% 43% 43% 58%;
-  background: #6d775f;
-}
-
-.model-preview--fish span::after {
-  position: absolute;
-  right: -15px;
-  border-width: 10px 0 10px 17px;
-  border-style: solid;
-  border-color: transparent transparent transparent #6d775f;
-  content: "";
-}
-
-.model-preview--snail span {
-  width: 29px;
-  height: 40px;
-  border-radius: 50% 50% 40% 40%;
-  background: repeating-radial-gradient(circle at 50% 62%, #b4a083 0 5px, #746b5e 6px 9px);
-  transform: rotate(-12deg);
+.model-preview canvas {
+  display: block;
+  width: 76px !important;
+  height: 118px !important;
 }
 
 .guide-note {

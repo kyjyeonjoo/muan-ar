@@ -25,6 +25,7 @@ let pointer;
 let clock;
 let shells = [];
 let decoys = [];
+const guidePreviews = [];
 
 function cacheUi() {
   ui.intro = document.querySelector("#intro");
@@ -443,6 +444,39 @@ function addBurrowsAndDebris(group) {
   });
 }
 
+function initGuidePreviews() {
+  const modelFactories = {
+    shell: () => createShell(0),
+    crab: () => createCrab(0, 0xd76b45),
+    mudskipper: () => createMudskipper(0),
+    snail: () => createMudSnail(0),
+  };
+
+  document.querySelectorAll(".model-preview[data-model]").forEach((container) => {
+    const previewScene = new THREE.Scene();
+    const previewCamera = new THREE.PerspectiveCamera(38, 76 / 118, 0.01, 20);
+    previewCamera.position.set(0, 0.7, 2.35);
+    previewCamera.lookAt(0, 0.1, 0);
+
+    const previewRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    previewRenderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+    previewRenderer.setSize(76, 118);
+    previewRenderer.outputColorSpace = THREE.SRGBColorSpace;
+    container.appendChild(previewRenderer.domElement);
+
+    previewScene.add(new THREE.HemisphereLight(0xffffff, 0x6f665a, 2.4));
+    const light = new THREE.DirectionalLight(0xfff4d3, 2.1);
+    light.position.set(-2, 3, 3);
+    previewScene.add(light);
+
+    const model = modelFactories[container.dataset.model]();
+    model.position.y = container.dataset.model === "snail" ? -0.1 : 0;
+    model.scale.multiplyScalar(container.dataset.model === "snail" ? 2.15 : 1.55);
+    previewScene.add(model);
+    guidePreviews.push({ scene: previewScene, camera: previewCamera, renderer: previewRenderer, model });
+  });
+}
+
 async function startExperience() {
   initAudio();
   ui.fieldGuide.classList.add("hidden");
@@ -754,6 +788,14 @@ function render(timestamp, frame) {
     world.rotation.y = Math.sin(elapsed * 0.16) * 0.08;
   }
 
+  if (!ui.fieldGuide.classList.contains("hidden")) {
+    guidePreviews.forEach((preview, index) => {
+      preview.model.rotation.y = elapsed * 0.7 + index * 0.45;
+      preview.model.rotation.x = Math.sin(elapsed * 0.8 + index) * 0.08;
+      preview.renderer.render(preview.scene, preview.camera);
+    });
+  }
+
   renderer.render(scene, camera);
 }
 
@@ -831,6 +873,7 @@ function onResize() {
 
 cacheUi();
 initThree();
+initGuidePreviews();
 ui.start.addEventListener("click", () => {
   ui.intro.classList.add("hidden");
   ui.fieldGuide.classList.remove("hidden");
