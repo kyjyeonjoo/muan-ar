@@ -13,6 +13,9 @@ const state = {
   hitTestSource: null,
   hitTestSourceRequested: false,
   audio: null,
+  orientationEnabled: false,
+  orientationBase: null,
+  orientation: { beta: 0, gamma: 0 },
 };
 
 let scene;
@@ -43,6 +46,8 @@ function cacheUi() {
   ui.resultStars = document.querySelector("#result-stars");
   ui.resultComment = document.querySelector("#result-comment");
   ui.progress = document.querySelector("#progress-bar");
+  ui.progressCount = document.querySelector("#progress-count");
+  ui.missionProgress = document.querySelector("#mission-progress");
   ui.toast = document.querySelector("#toast");
   ui.npcDialog = document.querySelector("#npc-dialog");
   ui.npcMessage = document.querySelector("#npc-message");
@@ -479,6 +484,7 @@ function initGuidePreviews() {
 
 async function startExperience() {
   initAudio();
+  await enableOrientationControls();
   ui.fieldGuide.classList.add("hidden");
   ui.hud.classList.remove("hidden");
 
@@ -488,6 +494,37 @@ async function startExperience() {
   } else {
     await startPreviewMode();
   }
+}
+
+async function enableOrientationControls() {
+  if (!window.DeviceOrientationEvent) return;
+  try {
+    if (typeof DeviceOrientationEvent.requestPermission === "function") {
+      const permission = await DeviceOrientationEvent.requestPermission();
+      if (permission !== "granted") return;
+    }
+    window.addEventListener("deviceorientation", handleDeviceOrientation, true);
+    state.orientationEnabled = true;
+  } catch {
+    state.orientationEnabled = false;
+  }
+}
+
+function handleDeviceOrientation(event) {
+  if (event.beta == null || event.gamma == null) return;
+  if (!state.orientationBase) {
+    state.orientationBase = { beta: event.beta, gamma: event.gamma };
+  }
+  state.orientation.beta = THREE.MathUtils.clamp(
+    event.beta - state.orientationBase.beta,
+    -35,
+    35
+  );
+  state.orientation.gamma = THREE.MathUtils.clamp(
+    event.gamma - state.orientationBase.gamma,
+    -40,
+    40
+  );
 }
 
 async function supportsImmersiveAr() {
@@ -553,7 +590,7 @@ async function startPreviewMode() {
   reticle.visible = true;
   ui.guide.querySelector("strong").textContent = "갯벌을 배치할 준비가 됐어요";
   ui.guide.querySelector("p").textContent = "화면을 터치해 탐험을 시작하세요.";
-  ui.hint.textContent = "화면을 터치해 갯벌을 배치하세요.";
+  ui.hint.textContent = "배치 후 스마트폰을 움직여 여러 각도에서 탐색하세요.";
 }
 
 function cameraErrorMessage(error) {
@@ -623,7 +660,7 @@ function placeWorld() {
   reticle.visible = false;
   state.placed = true;
   ui.guide.classList.add("hidden");
-  ui.hint.textContent = "주변을 둘러보고 빛나는 조개를 터치하세요!";
+  ui.hint.textContent = "스마트폰을 좌우로 움직이며 빛나는 조개를 찾아보세요!";
   playTone(330, 0.13, "sine");
   speakNpc("반가워! 나는 무무야. 빛나는 조개 5개를 찾으면 돼. 꽃게를 누르면 50점이 깎이니 조심해!", 6500);
 }
@@ -675,6 +712,8 @@ function updateHud() {
   ui.shellCount.textContent = state.collected;
   ui.score.textContent = state.score;
   ui.progress.style.width = `${(state.collected / TOTAL_SHELLS) * 100}%`;
+  ui.progressCount.textContent = `${state.collected} / ${TOTAL_SHELLS}`;
+  ui.missionProgress.setAttribute("aria-valuenow", state.collected);
 }
 
 function showToast(message) {
@@ -785,7 +824,18 @@ function render(timestamp, frame) {
   });
 
   if (state.previewMode && state.placed) {
-    world.rotation.y = Math.sin(elapsed * 0.16) * 0.08;
+    if (state.orientationEnabled && state.orientationBase) {
+      const yaw = THREE.MathUtils.degToRad(state.orientation.gamma) * 0.72;
+      const pitch = THREE.MathUtils.degToRad(state.orientation.beta) * 0.38;
+      const radius = 5.6;
+      camera.position.x = Math.sin(yaw) * radius;
+      camera.position.z = Math.cos(yaw) * radius - 2.6;
+      camera.position.y = THREE.MathUtils.clamp(2.55 - pitch * 2.2, 1.45, 3.35);
+      camera.lookAt(0, -0.65, -2.6);
+      world.rotation.y = 0;
+    } else {
+      world.rotation.y = Math.sin(elapsed * 0.16) * 0.08;
+    }
   }
 
   if (!ui.fieldGuide.classList.contains("hidden")) {
