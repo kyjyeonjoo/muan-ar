@@ -167,8 +167,35 @@ function createTidalWorld() {
     const crab = createCrab(index, color);
     crab.position.set(x, y, z);
     crab.rotation.y = rotation;
+    crab.userData.baseY = y;
     group.add(crab);
     decoys.push(crab);
+  });
+
+  [
+    [-2.25, 0.1, -0.15, 0.55],
+    [1.15, 0.1, -0.95, -0.8],
+  ].forEach(([x, y, z, rotation], index) => {
+    const mudskipper = createMudskipper(index);
+    mudskipper.position.set(x, y, z);
+    mudskipper.rotation.y = rotation;
+    mudskipper.userData.baseY = y;
+    group.add(mudskipper);
+    decoys.push(mudskipper);
+  });
+
+  [
+    [-0.75, 0.075, -1.72, 0.2],
+    [2.25, 0.075, -0.55, -0.4],
+    [-1.72, 0.075, 1.28, 0.7],
+    [0.72, 0.075, 2.05, -0.8],
+  ].forEach(([x, y, z, rotation], index) => {
+    const snail = createMudSnail(index);
+    snail.position.set(x, y, z);
+    snail.rotation.y = rotation;
+    snail.userData.baseY = y;
+    group.add(snail);
+    decoys.push(snail);
   });
 
   addBurrowsAndDebris(group);
@@ -231,6 +258,8 @@ function createShell(index) {
 function createCrab(index, color) {
   const crab = new THREE.Group();
   crab.userData.decoy = true;
+  crab.userData.creatureName = index === 0 ? "칠게" : "꽃게";
+  crab.userData.creatureType = "crab";
   crab.userData.index = index;
   crab.userData.phase = index * 1.7;
 
@@ -283,6 +312,93 @@ function createCrab(index, color) {
   });
 
   return crab;
+}
+
+function createMudskipper(index) {
+  const fish = new THREE.Group();
+  fish.userData.decoy = true;
+  fish.userData.creatureName = "망둥어";
+  fish.userData.creatureType = "mudskipper";
+  fish.userData.phase = 4.2 + index * 1.4;
+
+  const skin = new THREE.MeshStandardMaterial({
+    color: index ? 0x798066 : 0x66745f,
+    roughness: 0.82,
+  });
+  const belly = new THREE.MeshStandardMaterial({ color: 0xb9aa83, roughness: 0.9 });
+  const dark = new THREE.MeshStandardMaterial({ color: 0x252823, roughness: 0.7 });
+
+  const body = new THREE.Mesh(new THREE.SphereGeometry(0.2, 22, 14), skin);
+  body.scale.set(1.65, 0.48, 0.68);
+  body.rotation.z = 0.06;
+  fish.add(body);
+
+  const bellyPatch = new THREE.Mesh(new THREE.SphereGeometry(0.15, 18, 10), belly);
+  bellyPatch.scale.set(1.45, 0.2, 0.56);
+  bellyPatch.position.set(0.03, -0.045, -0.015);
+  fish.add(bellyPatch);
+
+  [-1, 1].forEach((side) => {
+    const eye = new THREE.Mesh(new THREE.SphereGeometry(0.052, 12, 8), skin);
+    eye.position.set(-0.2, 0.13, side * 0.1);
+    fish.add(eye);
+    const pupil = new THREE.Mesh(new THREE.SphereGeometry(0.025, 10, 7), dark);
+    pupil.position.set(-0.23, 0.15, side * 0.125);
+    fish.add(pupil);
+
+    const fin = new THREE.Mesh(new THREE.ConeGeometry(0.09, 0.2, 3), skin);
+    fin.rotation.set(Math.PI / 2, 0, side * 0.7);
+    fin.position.set(0.02, -0.015, side * 0.19);
+    fish.add(fin);
+  });
+
+  const tail = new THREE.Mesh(new THREE.ConeGeometry(0.13, 0.28, 4), skin);
+  tail.rotation.z = -Math.PI / 2;
+  tail.position.x = 0.38;
+  fish.add(tail);
+  fish.userData.tail = tail;
+
+  return fish;
+}
+
+function createMudSnail(index) {
+  const snail = new THREE.Group();
+  snail.userData.decoy = true;
+  snail.userData.creatureName = "갯고둥";
+  snail.userData.creatureType = "snail";
+  snail.userData.phase = 7.5 + index * 0.85;
+
+  const colors = [0x777467, 0x8a7963, 0x666b64, 0x917d68];
+  const shellMaterial = new THREE.MeshStandardMaterial({
+    color: colors[index],
+    roughness: 0.88,
+  });
+  const footMaterial = new THREE.MeshStandardMaterial({
+    color: 0x9b927d,
+    roughness: 0.95,
+  });
+
+  const foot = new THREE.Mesh(new THREE.CapsuleGeometry(0.045, 0.2, 4, 10), footMaterial);
+  foot.rotation.z = Math.PI / 2;
+  foot.scale.set(1, 0.6, 1);
+  snail.add(foot);
+
+  const shell = new THREE.Mesh(new THREE.ConeGeometry(0.095, 0.25, 18), shellMaterial);
+  shell.rotation.z = -0.28;
+  shell.position.set(0.02, 0.11, 0);
+  snail.add(shell);
+
+  for (let i = 0; i < 3; i += 1) {
+    const band = new THREE.Mesh(
+      new THREE.TorusGeometry(0.052 + i * 0.011, 0.008, 6, 18),
+      new THREE.MeshStandardMaterial({ color: 0xb5a48a, roughness: 0.9 })
+    );
+    band.rotation.x = Math.PI / 2;
+    band.position.set(-0.005, 0.07 + i * 0.045, 0);
+    snail.add(band);
+  }
+
+  return snail;
 }
 
 function addBurrowsAndDebris(group) {
@@ -503,8 +619,9 @@ function hitDecoy(decoy) {
   state.score -= 50;
   state.mistakes += 1;
   updateHud();
-  showToast("조개가 아니에요! -50점");
-  speakNpc("앗, 그건 조개가 아니라 갯벌 친구야! 생물은 관찰만 하고 조개를 찾아보자.", 4200);
+  const name = decoy.userData.creatureName || "갯벌 친구";
+  showToast(`${name}예요! 조개가 아니에요 · -50점`);
+  speakNpc(`앗, ${name}이야! 갯벌 생물은 눈으로 관찰하고 빛나는 조개를 찾아보자.`, 4200);
   playTone(170, 0.2, "sawtooth");
   if (navigator.vibrate) navigator.vibrate([30, 40, 30]);
 
@@ -607,7 +724,18 @@ function render(timestamp, frame) {
         delete decoy.userData.wrongAnimation;
       }
     } else {
-      decoy.position.y = 0.1 + Math.sin(elapsed * 1.6 + decoy.userData.phase) * 0.012;
+      decoy.position.y =
+        (decoy.userData.baseY ?? 0.1) +
+        Math.sin(elapsed * 1.6 + decoy.userData.phase) * 0.012;
+      if (decoy.userData.creatureType === "mudskipper") {
+        decoy.rotation.z = Math.sin(elapsed * 2.5 + decoy.userData.phase) * 0.035;
+        if (decoy.userData.tail) {
+          decoy.userData.tail.rotation.y =
+            Math.sin(elapsed * 5 + decoy.userData.phase) * 0.24;
+        }
+      } else if (decoy.userData.creatureType === "snail") {
+        decoy.rotation.y += 0.0008;
+      }
     }
   });
 

@@ -405,36 +405,42 @@ h1 {
 .complete-npc {
   position: relative;
   flex: 0 0 auto;
-  border: 3px solid rgba(255, 255, 255, 0.76);
-  background: linear-gradient(145deg, #4e82ca, #1d52a0);
-  box-shadow: 0 8px 20px rgba(20, 58, 112, 0.25);
+  border: 3px solid #f8fcff;
+  background:
+    radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 0.38), transparent 19%),
+    linear-gradient(150deg, #5c91d8, #1d52a0 72%);
+  box-shadow:
+    0 9px 22px rgba(20, 58, 112, 0.28),
+    inset 0 -7px 12px rgba(23, 61, 117, 0.22);
 }
 
 .npc-dialog__portrait {
-  width: 57px;
-  height: 53px;
-  border-radius: 48% 48% 42% 42%;
+  width: 62px;
+  height: 58px;
+  border-radius: 52% 52% 43% 43%;
+  animation: npc-float 2.6s ease-in-out infinite;
 }
 
 .npc-dialog__portrait::before,
 .npc-dialog__portrait::after {
   position: absolute;
-  bottom: -12px;
-  width: 12px;
-  height: 23px;
-  border-radius: 50%;
+  z-index: -1;
+  bottom: -13px;
+  width: 14px;
+  height: 25px;
+  border-radius: 50% 50% 65% 65%;
   background: #1d52a0;
   content: "";
 }
 
 .npc-dialog__portrait::before {
-  left: 8px;
-  transform: rotate(28deg);
+  left: 5px;
+  transform: rotate(38deg);
 }
 
 .npc-dialog__portrait::after {
-  right: 8px;
-  transform: rotate(-28deg);
+  right: 5px;
+  transform: rotate(-38deg);
 }
 
 .npc-eye,
@@ -447,26 +453,89 @@ h1 {
 }
 
 .npc-eye {
-  top: 17px;
+  top: 22px;
 }
 
 .npc-eye--left {
-  left: 15px;
+  left: 16px;
 }
 
 .npc-eye--right {
-  right: 15px;
+  right: 16px;
 }
 
 .npc-mouth {
   position: absolute;
-  bottom: 11px;
+  bottom: 10px;
   left: 50%;
-  width: 12px;
-  height: 6px;
-  border-bottom: 2px solid #173d75;
-  border-radius: 50%;
+  width: 11px;
+  height: 7px;
+  border: 2px solid #173d75;
+  border-top: 0;
+  border-radius: 0 0 9px 9px;
   transform: translateX(-50%);
+}
+
+.npc-badge {
+  position: absolute;
+  z-index: 2;
+  top: -8px;
+  left: 50%;
+  display: grid;
+  width: 23px;
+  height: 18px;
+  place-items: center;
+  border: 2px solid #f8fcff;
+  border-radius: 8px 8px 6px 6px;
+  color: #173d75;
+  background: #eadda8;
+  box-shadow: 0 3px 7px rgba(23, 61, 117, 0.18);
+  font-size: 8px;
+  font-weight: 950;
+  transform: translateX(-50%) rotate(-3deg);
+}
+
+.npc-cheek {
+  position: absolute;
+  top: 34px;
+  width: 8px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(234, 221, 168, 0.7);
+}
+
+.npc-cheek--left {
+  left: 8px;
+}
+
+.npc-cheek--right {
+  right: 8px;
+}
+
+.npc-tentacle {
+  position: absolute;
+  z-index: -1;
+  bottom: -17px;
+  width: 12px;
+  height: 28px;
+  border-radius: 45% 45% 70% 70%;
+  background: linear-gradient(#2865bc, #1d52a0);
+  transform-origin: top center;
+}
+
+.npc-tentacle--one {
+  left: 14px;
+  transform: rotate(18deg);
+}
+
+.npc-tentacle--two {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.npc-tentacle--three {
+  right: 14px;
+  transform: rotate(-18deg);
 }
 
 .npc-dialog__bubble {
@@ -522,43 +591,44 @@ h1 {
   z-index: 2;
   top: 17px;
   right: 19px;
-  width: 58px;
-  height: 52px;
-  border-radius: 48% 48% 42% 42%;
+  width: 62px;
+  height: 57px;
+  border-radius: 52% 52% 43% 43%;
   transform: rotate(7deg);
 }
 
 .complete-npc::before,
 .complete-npc::after {
   position: absolute;
-  bottom: -11px;
-  width: 12px;
-  height: 23px;
-  border-radius: 50%;
+  z-index: -1;
+  bottom: -13px;
+  width: 14px;
+  height: 25px;
+  border-radius: 50% 50% 65% 65%;
   background: #1d52a0;
   content: "";
 }
 
 .complete-npc::before {
-  left: 9px;
-  transform: rotate(30deg);
+  left: 5px;
+  transform: rotate(38deg);
 }
 
 .complete-npc::after {
-  right: 9px;
-  transform: rotate(-30deg);
+  right: 5px;
+  transform: rotate(-38deg);
 }
 
 .complete-npc__eye {
-  top: 17px;
+  top: 22px;
 }
 
 .complete-npc__eye--left {
-  left: 15px;
+  left: 16px;
 }
 
 .complete-npc__eye--right {
-  right: 15px;
+  right: 16px;
 }
 
 .result-hero {
@@ -793,5 +863,11 @@ h1 {
   from {
     opacity: 0;
     transform: translateY(22px) scale(0.94);
+  }
+}
+
+@keyframes npc-float {
+  50% {
+    transform: translateY(-3px) rotate(-2deg);
   }
 }
