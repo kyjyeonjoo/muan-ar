@@ -820,6 +820,247 @@ h1 {
   gap: 8px;
 }
 
+.guide-modal,
+.info-modal {
+  align-items: start;
+  padding: max(18px, env(safe-area-inset-top)) 15px max(18px, env(safe-area-inset-bottom));
+}
+
+.guide-card {
+  width: min(100%, 620px);
+  margin: auto;
+  padding: 21px 16px 16px;
+  border-radius: 25px;
+  background: #f8fcff;
+  box-shadow: 0 28px 75px rgba(0, 0, 0, 0.35);
+}
+
+.guide-header {
+  text-align: center;
+}
+
+.guide-header .eyebrow,
+.info-header .eyebrow {
+  color: #1d52a0;
+}
+
+.guide-header h2,
+.info-header h2 {
+  margin: 2px 0 6px;
+  color: #34383b;
+  font-size: 24px;
+  letter-spacing: -0.045em;
+}
+
+.guide-header > p:last-child,
+.info-header > p:last-child {
+  margin: 0;
+  color: #777b7e;
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.guide-grid {
+  display: grid;
+  grid-auto-columns: min(82vw, 260px);
+  grid-auto-flow: column;
+  gap: 10px;
+  margin: 17px -16px 11px;
+  padding: 0 16px 7px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+}
+
+.creature-card {
+  display: grid;
+  grid-template-columns: 1fr 76px;
+  overflow: hidden;
+  border: 1px solid #d9dce1;
+  border-radius: 18px;
+  background: #fff;
+  scroll-snap-align: center;
+}
+
+.creature-card--target {
+  border: 2px solid #e0bd58;
+  box-shadow: 0 8px 22px rgba(196, 154, 42, 0.16);
+}
+
+.creature-card > img {
+  width: 100%;
+  height: 118px;
+  object-fit: cover;
+}
+
+.creature-card > div:last-child {
+  grid-column: 1 / -1;
+  padding: 11px 12px 13px;
+}
+
+.creature-card strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #173d75;
+  font-size: 13px;
+}
+
+.creature-card p {
+  margin: 0;
+  color: #777b7e;
+  font-size: 10px;
+  line-height: 1.55;
+}
+
+.model-preview {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(circle, rgba(234, 221, 168, 0.75), transparent 57%),
+    #e5ecf7;
+}
+
+.model-preview::before {
+  position: absolute;
+  top: 8px;
+  color: #1d52a0;
+  content: "3D";
+  font-size: 8px;
+  font-weight: 950;
+}
+
+.model-preview--shell span {
+  width: 45px;
+  height: 31px;
+  border: 3px solid #ad7756;
+  border-radius: 50% 50% 42% 42%;
+  background: repeating-linear-gradient(90deg, #dfbd88 0 5px, #c89065 5px 8px);
+  box-shadow: 0 7px 0 rgba(29, 82, 160, 0.18);
+}
+
+.model-preview--crab span {
+  position: relative;
+  width: 43px;
+  height: 24px;
+  border-radius: 50%;
+  background: #b16e4e;
+}
+
+.model-preview--crab span::before,
+.model-preview--crab span::after {
+  position: absolute;
+  top: 2px;
+  width: 19px;
+  height: 12px;
+  border: 5px solid #8d583f;
+  border-bottom: 0;
+  content: "";
+}
+
+.model-preview--crab span::before {
+  right: 34px;
+  transform: rotate(-20deg);
+}
+
+.model-preview--crab span::after {
+  left: 34px;
+  transform: rotate(20deg);
+}
+
+.model-preview--fish span {
+  position: relative;
+  width: 48px;
+  height: 20px;
+  border-radius: 58% 43% 43% 58%;
+  background: #6d775f;
+}
+
+.model-preview--fish span::after {
+  position: absolute;
+  right: -15px;
+  border-width: 10px 0 10px 17px;
+  border-style: solid;
+  border-color: transparent transparent transparent #6d775f;
+  content: "";
+}
+
+.model-preview--snail span {
+  width: 29px;
+  height: 40px;
+  border-radius: 50% 50% 40% 40%;
+  background: repeating-radial-gradient(circle at 50% 62%, #b4a083 0 5px, #746b5e 6px 9px);
+  transform: rotate(-12deg);
+}
+
+.guide-note {
+  margin: 4px 0 13px;
+  color: #777b7e;
+  font-size: 8px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.guide-actions,
+.info-actions {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 8px;
+}
+
+.guide-actions .primary-btn,
+.guide-actions .secondary-btn,
+.info-actions .primary-btn,
+.info-actions .secondary-btn {
+  min-height: 49px;
+  border-radius: 14px;
+  font-size: 11px;
+}
+
+.info-card {
+  margin: auto;
+  padding-top: 20px;
+  text-align: left;
+}
+
+.info-header {
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+.info-sections {
+  display: grid;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.info-sections article {
+  padding: 12px 13px;
+  border: 1px solid #d9dce1;
+  border-radius: 15px;
+  background: #f8fcff;
+}
+
+.info-sections span {
+  color: #1d52a0;
+  font-size: 8px;
+  font-weight: 950;
+  letter-spacing: 0.06em;
+}
+
+.info-sections h3 {
+  margin: 4px 0 5px;
+  color: #34383b;
+  font-size: 13px;
+}
+
+.info-sections p {
+  margin: 0;
+  color: #777b7e;
+  font-size: 10px;
+  line-height: 1.6;
+}
+
 .result-actions .primary-btn,
 .secondary-btn {
   min-height: 47px;

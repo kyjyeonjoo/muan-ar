@@ -33,9 +33,72 @@
             <figcaption>무안 갯벌 체험 콘텐츠 · 사용자 제공 이미지</figcaption>
           </figure>
           <button id="start-btn" class="primary-btn" type="button">
-            체험 시작하기
+            생물 도감 먼저 보기
           </button>
-          <p class="permission-copy">카메라 사용 권한이 필요합니다.</p>
+          <p class="permission-copy">도감을 확인한 뒤 카메라 체험이 시작됩니다.</p>
+        </div>
+      </section>
+
+      <section id="field-guide" class="overlay modal guide-modal hidden" role="dialog" aria-modal="true">
+        <div class="guide-card">
+          <header class="guide-header">
+            <p class="eyebrow">BEFORE EXPLORATION</p>
+            <h2>무무의 갯벌 생물 도감</h2>
+            <p>실제 생김새와 게임 속 3D 모형의 특징을 먼저 비교해 보세요.</p>
+          </header>
+
+          <div class="guide-grid">
+            <article class="creature-card creature-card--target">
+              <img src="./assets/guide-clam.jpg" alt="해변 위 실제 조개 사진" />
+              <div class="model-preview model-preview--shell" aria-label="게임 속 조개 모형">
+                <span></span>
+              </div>
+              <div>
+                <strong>조개 · 수집 대상</strong>
+                <p>부채처럼 퍼진 줄무늬와 바닥의 금빛 원을 찾으세요.</p>
+              </div>
+            </article>
+            <article class="creature-card">
+              <img src="./assets/guide-fiddler-crab.jpg" alt="실제 농게류 사진" />
+              <div class="model-preview model-preview--crab" aria-label="게임 속 게 모형">
+                <span></span>
+              </div>
+              <div>
+                <strong>꽃게·칠게 · 관찰 대상</strong>
+                <p>옆으로 뻗은 다리와 집게가 보여요. 누르면 감점됩니다.</p>
+              </div>
+            </article>
+            <article class="creature-card">
+              <img src="./assets/guide-mudskipper.jpg" alt="실제 망둥어 사진" />
+              <div class="model-preview model-preview--fish" aria-label="게임 속 망둥어 모형">
+                <span></span>
+              </div>
+              <div>
+                <strong>망둥어 · 관찰 대상</strong>
+                <p>튀어나온 눈과 길쭉한 몸, 움직이는 꼬리가 특징이에요.</p>
+              </div>
+            </article>
+            <article class="creature-card">
+              <img src="./assets/guide-snail.jpg" alt="실제 고둥류 참고 사진" />
+              <div class="model-preview model-preview--snail" aria-label="게임 속 갯고둥 모형">
+                <span></span>
+              </div>
+              <div>
+                <strong>갯고둥 · 관찰 대상</strong>
+                <p>작고 뾰족한 나선형 껍데기라 조개와 모양이 달라요.</p>
+              </div>
+            </article>
+          </div>
+
+          <p class="guide-note">
+            사진은 형태 비교를 위한 대표 이미지이며 무안 현장 개체와 종·색이 다를 수 있습니다.
+            사진: NOAA(농게, Public Domain), Holger Krisp(망둥어, CC BY 3.0),
+            macrophile(고둥 참고, CC BY 2.0), febb(조개, CC BY-SA 3.0) · Wikimedia Commons
+          </p>
+          <div class="guide-actions">
+            <button id="guide-back-btn" class="secondary-btn" type="button">처음 화면</button>
+            <button id="guide-start-btn" class="primary-btn" type="button">AR 탐험 시작</button>
+          </div>
         </div>
       </section>
 
@@ -126,6 +189,25 @@
             <div><span>★</span><small>최종 점수</small><strong id="final-score">500점</strong></div>
           </section>
 
+          <div class="result-tip">
+            <strong>무무의 한마디</strong>
+            <p id="result-comment">완벽한 탐험이야! 갯벌 박사로 임명할게.</p>
+          </div>
+          <div class="result-actions">
+            <button id="replay-btn" class="secondary-btn" type="button">↻ 다시 도전</button>
+            <button id="open-info-btn" class="primary-btn" type="button">관광·생태 정보 보기</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="info-card" class="overlay modal info-modal hidden" role="dialog" aria-modal="true">
+        <div class="complete-card info-card">
+          <header class="info-header">
+            <p class="eyebrow">MUAN TIDAL FLAT GUIDE</p>
+            <h2>무안 갯벌 탐험 노트</h2>
+            <p>미션에서 만난 생물과 갯벌의 가치를 더 알아보세요.</p>
+          </header>
+
           <article class="nature-card">
             <div class="nature-card__visual">
               <img
@@ -137,12 +219,12 @@
               무안 갯벌 체험 콘텐츠 · 사용자 제공 이미지
             </p>
             <div class="nature-card__body">
-              <span>무무의 갯벌 이야기</span>
-              <h3>무안 갯벌은 특별합니다!</h3>
+              <span>생명이 살아가는 무안 갯벌</span>
+              <h3>물이 빠진 뒤 드러나는 거대한 생태 교실</h3>
               <p>
-                넓은 무안 갯벌은 흰발농게와 저어새가 살아가는 생명의
-                공간이에요. 무안황토갯벌랜드에서는 갯벌 생태 전시와
-                체험을 함께 즐길 수 있어요. 갯벌 생물은 눈으로 관찰해 주세요.
+                갯벌의 진흙과 모래 사이에는 조개, 게, 고둥과 작은 물고기가
+                살아갑니다. 이 생물들은 유기물을 먹고 퇴적물을 뒤섞으며,
+                갯벌은 바닷물을 정화하고 탄소를 저장하는 데 도움을 줍니다.
               </p>
               <div class="fact-chips">
                 <span>물 정화</span><span>탄소 저장</span><span>생물 서식지</span>
@@ -150,12 +232,38 @@
             </div>
           </article>
 
-          <div class="result-tip">
-            <strong>무무의 한마디</strong>
-            <p id="result-comment">완벽한 탐험이야! 갯벌 박사로 임명할게.</p>
+          <div class="info-sections">
+            <article>
+              <span>01 · 생태 관찰</span>
+              <h3>구멍과 발자국도 중요한 단서예요</h3>
+              <p>
+                갯벌 구멍은 게나 갯지렁이의 집일 수 있어요. 생물을 억지로
+                꺼내기보다 구멍 주변의 모래 알갱이, 이동 흔적과 먹이 활동을
+                천천히 관찰해 보세요.
+              </p>
+            </article>
+            <article>
+              <span>02 · 관광 체험</span>
+              <h3>무안황토갯벌랜드에서 더 깊게 체험해요</h3>
+              <p>
+                전시와 생태 교육을 통해 갯벌의 형성 과정과 서식 생물을
+                알아볼 수 있어요. 실제 방문 전에는 공식 안내에서 운영 시간,
+                체험 프로그램과 물때를 확인하는 것이 좋아요.
+              </p>
+            </article>
+            <article>
+              <span>03 · 탐방 약속</span>
+              <h3>잡기보다 관찰하고 흔적은 남기지 않기</h3>
+              <p>
+                보호 생물과 어린 개체는 눈으로만 보고, 쓰레기는 반드시
+                되가져가세요. 미끄러운 곳에서는 장화를 착용하고 정해진
+                탐방 구역과 안전 안내를 따라야 합니다.
+              </p>
+            </article>
           </div>
-          <div class="result-actions">
-            <button id="replay-btn" class="secondary-btn" type="button">↻ 다시 도전</button>
+
+          <div class="info-actions">
+            <button id="info-replay-btn" class="secondary-btn" type="button">↻ 다시 도전</button>
             <button id="close-result-btn" class="primary-btn" type="button">갯벌 더 둘러보기</button>
           </div>
         </div>

@@ -29,6 +29,9 @@ let decoys = [];
 function cacheUi() {
   ui.intro = document.querySelector("#intro");
   ui.start = document.querySelector("#start-btn");
+  ui.fieldGuide = document.querySelector("#field-guide");
+  ui.guideBack = document.querySelector("#guide-back-btn");
+  ui.guideStart = document.querySelector("#guide-start-btn");
   ui.hud = document.querySelector("#hud");
   ui.guide = document.querySelector("#scan-guide");
   ui.hint = document.querySelector("#hint");
@@ -43,7 +46,10 @@ function cacheUi() {
   ui.npcDialog = document.querySelector("#npc-dialog");
   ui.npcMessage = document.querySelector("#npc-message");
   ui.complete = document.querySelector("#complete");
+  ui.infoCard = document.querySelector("#info-card");
+  ui.openInfo = document.querySelector("#open-info-btn");
   ui.replay = document.querySelector("#replay-btn");
+  ui.infoReplay = document.querySelector("#info-replay-btn");
   ui.closeResult = document.querySelector("#close-result-btn");
   ui.reset = document.querySelector("#reset-btn");
   ui.cameraFeed = document.querySelector("#camera-feed");
@@ -439,7 +445,7 @@ function addBurrowsAndDebris(group) {
 
 async function startExperience() {
   initAudio();
-  ui.intro.classList.add("hidden");
+  ui.fieldGuide.classList.add("hidden");
   ui.hud.classList.remove("hidden");
 
   const supported = await supportsImmersiveAr();
@@ -540,7 +546,10 @@ function showBrowserNote(message, duration = 3200) {
 }
 
 function onPointerUp(event) {
-  if (!ui.complete.classList.contains("hidden")) return;
+  if (
+    !ui.complete.classList.contains("hidden") ||
+    !ui.infoCard.classList.contains("hidden")
+  ) return;
 
   pointer.x = (event.clientX / innerWidth) * 2 - 1;
   pointer.y = -(event.clientY / innerHeight) * 2 + 1;
@@ -662,6 +671,7 @@ function showComplete() {
         ? "멋진 탐험이야! 갯벌 생물을 조금만 더 잘 관찰해 보자."
         : "조개와 갯벌 친구들의 생김새를 기억하고 다시 도전해 봐!";
   ui.complete.classList.remove("hidden");
+  ui.infoCard.classList.add("hidden");
   ui.npcDialog.classList.remove("show");
   playVictorySound();
 }
@@ -672,6 +682,7 @@ function resetGame() {
   state.mistakes = 0;
   updateHud();
   ui.complete.classList.add("hidden");
+  ui.infoCard.classList.add("hidden");
   shells.forEach((shell) => {
     shell.visible = true;
     shell.scale.set(1, 1, 1);
@@ -805,9 +816,11 @@ function playCollectSound() {
 }
 
 function playVictorySound() {
-  [392, 523, 659, 784].forEach((frequency, index) => {
-    playTone(frequency, 0.32, "triangle", index * 0.12);
+  [392, 523, 659, 784, 1047].forEach((frequency, index) => {
+    playTone(frequency, 0.38, "triangle", index * 0.1);
   });
+  [262, 330, 392].forEach((frequency) => playTone(frequency, 0.72, "sine", 0.5));
+  setTimeout(() => navigator.vibrate?.([90, 55, 140]), 80);
 }
 
 function onResize() {
@@ -818,10 +831,23 @@ function onResize() {
 
 cacheUi();
 initThree();
-ui.start.addEventListener("click", startExperience);
+ui.start.addEventListener("click", () => {
+  ui.intro.classList.add("hidden");
+  ui.fieldGuide.classList.remove("hidden");
+});
+ui.guideBack.addEventListener("click", () => {
+  ui.fieldGuide.classList.add("hidden");
+  ui.intro.classList.remove("hidden");
+});
+ui.guideStart.addEventListener("click", startExperience);
 ui.reset.addEventListener("click", resetGame);
 ui.replay.addEventListener("click", resetGame);
-ui.closeResult.addEventListener("click", () => {
+ui.infoReplay.addEventListener("click", resetGame);
+ui.openInfo.addEventListener("click", () => {
   ui.complete.classList.add("hidden");
+  ui.infoCard.classList.remove("hidden");
+});
+ui.closeResult.addEventListener("click", () => {
+  ui.infoCard.classList.add("hidden");
   speakNpc(`최종 점수는 ${state.score}점이야. 갯벌 친구들을 천천히 더 둘러봐!`, 4200);
 });
